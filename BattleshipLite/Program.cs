@@ -26,6 +26,8 @@ do
         winner = activePlayer;
     }
 
+    // Display score
+
 } while (winner == null);
 
 IdentifyWinner(winner);
