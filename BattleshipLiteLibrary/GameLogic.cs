@@ -24,15 +24,14 @@ public static class GameLogic
             5,
         };
 
-        foreach(string letter in letters)
+        foreach (string letter in letters)
         {
-            foreach(int number in numbers)
+            foreach (int number in numbers)
             {
                 AddGridSpot(playerInfo, letter, number);
             }
         }
     }
-
     private static void AddGridSpot(PlayerInfoModel playerInfo, string letter, int number)
     {
         GridSpotModel spot = new()
@@ -45,9 +44,20 @@ public static class GameLogic
         playerInfo.ShotGrid.Add(spot);
     }
 
+    public static bool PlayerStillActive(PlayerInfoModel opponent)
+    {
+        throw new NotImplementedException();
+    }
+
+    public static int GetShotCount(PlayerInfoModel winner)
+    {
+        throw new NotImplementedException();
+    }
+
     public static bool PlaceShip(PlayerInfoModel playerInfo, string location)
     {
         throw new NotImplementedException();
     }
+
 }
 
