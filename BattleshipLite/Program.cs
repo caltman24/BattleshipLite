@@ -14,7 +14,7 @@ do
 
     RecordPlayerShot(activePlayer, opponent);
 
-    bool doesGameContinue = GameLogic.PlayerStillActive(opponent);
+    bool doesGameContinue = GameLogic.PlayerStillActive(opponent); //FIXME: Not implemented
 
     if (doesGameContinue)
     {
@@ -32,7 +32,6 @@ do
 
 IdentifyWinner(winner);
 
-
 Console.ReadLine();
 
 static void IdentifyWinner(PlayerInfoModel winner)
@@ -41,21 +40,36 @@ static void IdentifyWinner(PlayerInfoModel winner)
     Console.WriteLine($"{winner.Name} took {GameLogic.GetShotCount(winner)} shots");
 }
 
-// -----------------------
-// Video timestamp: 47:52
-// -----------------------
-
 static void RecordPlayerShot(PlayerInfoModel activePlayer, PlayerInfoModel opponent)
 {
-    // Ask for a shot (B2)
+    bool isValidShot = false;
+    string row = string.Empty;
+    int column;
+    do
+    {
+        // Ask for a shot (B2)
+        string? shotLocation = AskForShot();
 
-    // Determine the row / col of the shot. (split it apart)
+        // Determine the row / col of the shot. (split it apart)
+         (row, column) = GameLogic.SplitShot(shotLocation);
 
-    // Determne if the shot is valid
+        // Determne if the shot is valid
+        isValidShot = GameLogic.ValidateShot(activePlayer, row, column); // FIXME: Not implemnted
+
+        if (!isValidShot)
+        {
+            Console.WriteLine("Invalid Shot location. Please try again");
+        }
+
+    } while (!isValidShot);
+
 
     // Determine the results
+    bool isAHit = GameLogic.DetermineShotResults(opponent, row, column); // FIXME: Not implemnted
 
     // Record results
+    GameLogic.MarkShotResult(activePlayer, row, column, isAHit); // FIXME: Not implemnted
+
 }
 
 static void DisplayShotGrid(PlayerInfoModel activePlayer)
@@ -104,11 +118,12 @@ static PlayerInfoModel CreatePlayer(string playerName)
 
     // Ask the user for their name
     playerInfo.Name = AskUserForName();
-    // Load up the shot grid
+
+    // initalize the shot grid. happens behind the scense
     GameLogic.InitializeGrid(playerInfo);
 
     // Ask the user for their 5 ship placements
-    PlaceShips(playerInfo);
+    AskForShipPlacments(playerInfo);
 
     // Clear
     Console.Clear();
@@ -129,13 +144,20 @@ static string AskUserForName()
     return name;
 }
 
-static void PlaceShips(PlayerInfoModel playerInfo)
+static string? AskForShot()
+{
+
+        Console.Write("Enter where you would like to shoot: ");
+        return Console.ReadLine();
+}
+
+static void AskForShipPlacments(PlayerInfoModel playerInfo)
 {
     do
     {
         Console.Write($"Where do you want to place ship number {playerInfo.ShipLocations.Count + 1}: ");
         string? location = Console.ReadLine();
-        
+
         bool isValidLocation = GameLogic.PlaceShip(playerInfo, location);
 
         if (!isValidLocation)
@@ -145,5 +167,4 @@ static void PlaceShips(PlayerInfoModel playerInfo)
 
     } while (playerInfo.ShipLocations.Count < 5);
 }
-
 
