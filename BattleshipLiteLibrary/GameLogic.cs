@@ -99,7 +99,7 @@ public static class GameLogic
     private static bool ValidateShipLocation(PlayerInfoModel playerInfo, string row, int column)
     {
         bool isValidLocation = true;
-        foreach(var ship in playerInfo.ShipLocations)
+        foreach (var ship in playerInfo.ShipLocations)
         {
             if (ship.SpotLetter == row.ToUpper() && ship.SpotNumber == column)
             {
@@ -156,17 +156,37 @@ public static class GameLogic
 
         return isValidShot;
     }
-    // ------------------
-    //  TIMESTAMP: 31:49
-    // ------------------
+
     public static bool DetermineShotResults(PlayerInfoModel opponent, string row, int column)
     {
-        throw new NotImplementedException();
+        bool isAHit = false;
+        foreach (var gridSpot in opponent.ShipLocations)
+        {
+            if (gridSpot.SpotLetter == row.ToUpper() && gridSpot.SpotNumber == column)
+            {
+                isAHit = true;
+            }
+        }
+
+        return isAHit;
     }
 
     public static void MarkShotResult(PlayerInfoModel activePlayer, string row, int column, bool isAHit)
     {
-        throw new NotImplementedException();
+        foreach (var gridSpot in activePlayer.ShotGrid)
+        {
+            if (gridSpot.SpotLetter == row.ToUpper() && gridSpot.SpotNumber == column)
+            {
+                if (isAHit)
+                {
+                    gridSpot.Status = GridSpotStatus.Hit; 
+                } else
+                {
+                    gridSpot.Status = GridSpotStatus.Miss;
+                }
+                
+            }
+        }
     }
 }
 
